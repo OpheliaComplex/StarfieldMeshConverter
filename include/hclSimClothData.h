@@ -796,6 +796,8 @@ namespace hktypes {
 				{ "singles", "hkArray<hclStretchLinkConstraintSetMx::Single, hkContainerHeapAllocator>" },
 			};
 		};
+		
+
 
 		inline int ConstraintPriority() override {
 			return 1;
@@ -829,7 +831,55 @@ namespace hktypes {
 		}
 
 		void AddDefaultLink(hclSimClothData* cloth_data, uint16_t particleA, uint16_t particleB, float stiffness);
+	}; 
+
+	// NEW
+	class hclStretchLinkConstraintSet : public hclConstraintSet {
+	public:
+		using BaseType = hclConstraintSet;
+		class Link : public hkHolderBase {
+		public:
+			using BaseType = void;
+			uint16_t particleA;	// Offset: 0 Unk: 0
+			uint16_t particleB;	// Offset: 2 Unk: 0
+			float restLength;	// Offset: 4 Unk: 0
+			float stiffness;	// Offset: 8 Unk: 0
+
+			// Extra
+			bool FromInstance(const hkreflex::hkClassInstance* instance) override;
+			bool ToInstance(hkreflex::hkClassInstance* instance) override;
+			inline std::string GethkClassName() override { return "hclStretchLinkConstraintSet::Link"; };
+			inline std::string GetTranscriptId() override { return "hclStretchLinkConstraintSet::Link"; };
+			inline uint32_t GethkClassHash() override { return 275062867; };
+			inline std::vector<std::pair<std::string, std::string>> GethkClassMembers() override {
+				return {
+					{ "particleA", "hkUint16" },
+					{ "particleB", "hkUint16" },
+					{ "restLength", "hkReal" },
+					{ "stiffness", "hkReal" },
+				};
+			};
+			inline std::vector<std::pair<std::string, std::string>> GetTemplateArgs();
+		};
+
+		std::vector<hclStretchLinkConstraintSet::Link> links; // Offset: 40
+
+		// Extra
+		bool FromInstance(const hkreflex::hkClassInstance* instance) override;
+		bool ToInstance(hkreflex::hkClassInstance* instance) override;
+		inline std::string GethkClassName() override { return "hclStretchLinkConstraintSet"; };
+		inline std::string GetTranscriptId() override { return "hclStretchLinkConstraintSet"; };
+		inline uint32_t GethkClassHash() override { return 967254011; };
+		inline std::vector<std::pair<std::string, std::string>> GethkClassMembers() override {
+			return {
+				{ "links", "hkArray<hclStretchLinkConstraintSet::Link, hkContainerHeapAllocator>" },
+			};
+		};
+		inline std::vector<std::pair<std::string, std::string>> GetTemplateArgs();
 	};
+
+
+	// NEW END
 
 	class hclSimClothPose : public hkReferencedObject {
 	public:

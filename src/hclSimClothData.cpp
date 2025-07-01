@@ -1119,6 +1119,89 @@ void hktypes::hclStandardLinkConstraintSetMx::AddDefaultLink(hclSimClothData* cl
 	AddLinkImpl(particleA, particleB, stiffnessA, stiffnessB, restLength);
 }
 
+// NEW
+
+bool hktypes::hclStretchLinkConstraintSet::FromInstance(const hkreflex::hkClassInstance* instance) {
+	auto class_instance = dynamic_cast<const hkreflex::hkClassRecordInstance*>(instance);
+
+#ifndef NO_HK_TYPENAME_CHECK
+	if (class_instance && class_instance->type->type_name != "hclStretchLinkConstraintSet") {
+		std::cout << "hclStretchLinkConstraintSet::FromInstance: Wrong type!" << std::endl;
+		throw;
+	}
+#endif // NO_HK_TYPENAME_CHECK
+
+	hclConstraintSet::FromInstance(class_instance->GetInstanceByFieldName("class_parent"));
+	class_instance->GetInstanceByFieldName("links")->GetValue(links);
+	return true;
+}
+
+bool hktypes::hclStretchLinkConstraintSet::Link::FromInstance(const hkreflex::hkClassInstance* instance) {
+	auto class_instance = dynamic_cast<const hkreflex::hkClassRecordInstance*>(instance);
+
+#ifndef NO_HK_TYPENAME_CHECK
+	if (class_instance && class_instance->type->type_name != "hclStretchLinkConstraintSet::Link") {
+		std::cout << "hclStretchLinkConstraintSet::Link::FromInstance: Wrong type!" << std::endl;
+		throw;
+	}
+#endif // NO_HK_TYPENAME_CHECK
+
+	class_instance->GetInstanceByFieldName("particleA")->GetValue(particleA);
+	class_instance->GetInstanceByFieldName("particleB")->GetValue(particleB);
+	class_instance->GetInstanceByFieldName("restLength")->GetValue(restLength);
+	class_instance->GetInstanceByFieldName("stiffness")->GetValue(stiffness);
+
+	return true;
+}
+
+bool hktypes::hclStretchLinkConstraintSet::ToInstance(hkreflex::hkClassInstance* instance) {
+	auto class_instance = dynamic_cast<hkreflex::hkClassRecordInstance*>(instance);
+
+#ifndef NO_HK_TYPENAME_CHECK
+	if (class_instance && class_instance->type->type_name != "hclStretchLinkConstraintSet") {
+		std::cout << "hclStretchLinkConstraintSet::ToInstance: Wrong type: " << class_instance->type->type_name << std::endl;
+		std::cout << "hclStretchLinkConstraintSet::ToInstance: Wrong type: " << class_instance->type->type_name << std::endl;
+		throw;
+	}
+#endif // NO_HK_TYPENAME_CHECK
+
+	hclConstraintSet::ToInstance(class_instance->GetInstanceByFieldName("class_parent"));
+	class_instance->GetInstanceByFieldName("links")->SetValue(links);
+	return true;
+}
+
+bool hktypes::hclStretchLinkConstraintSet::Link::ToInstance(hkreflex::hkClassInstance* instance) {
+	auto class_instance = dynamic_cast<hkreflex::hkClassRecordInstance*>(instance);
+
+#ifndef NO_HK_TYPENAME_CHECK
+	if (class_instance && class_instance->type->type_name != "hclStretchLinkConstraintSet::Link") {
+		std::cout << "hclStretchLinkConstraintSet::Link::ToInstance: Wrong type: " << class_instance->type->type_name << std::endl;
+		std::cout << "hclStretchLinkConstraintSet::Link::ToInstance: Wrong type: " << class_instance->type->type_name << std::endl;
+		throw;
+	}
+#endif // NO_HK_TYPENAME_CHECK
+
+	class_instance->GetInstanceByFieldName("particleA")->SetValue(particleA);
+	class_instance->GetInstanceByFieldName("particleB")->SetValue(particleB);
+	class_instance->GetInstanceByFieldName("restLength")->SetValue(restLength);
+	class_instance->GetInstanceByFieldName("stiffness")->SetValue(stiffness);
+
+	return true;
+}
+
+inline std::vector<std::pair<std::string, std::string>> hktypes::hclStretchLinkConstraintSet::GetTemplateArgs() {
+	return {
+	};
+};
+
+inline std::vector<std::pair<std::string, std::string>> hktypes::hclStretchLinkConstraintSet::Link::GetTemplateArgs() {
+	return {
+	};
+};
+
+// NEW END
+
+
 bool hktypes::hclStretchLinkConstraintSetMx::Batch::FromInstance(const hkreflex::hkClassInstance* instance)
 {
 	auto class_instance = dynamic_cast<const hkreflex::hkClassRecordInstance*>(instance);

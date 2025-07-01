@@ -1108,9 +1108,9 @@ namespace hkreflex {
 			auto ptr_instance = dynamic_cast<const hkClassPointerInstance*>(this);
 			container = dynamic_cast<sub_t*>(hktypes::AllocateHolder(ptr_instance->ptr_instance));
 			if (ptr_instance->ptr_instance->GetValue(*container)) {
-				return false;
+				return false; // orig = false
 			}
-			return true;
+			return true; // orig = true
 		}
 		return false;
 	}
@@ -1539,6 +1539,7 @@ namespace hkreflex {
 					std::cout << "hkClassRecordInstance::GetArrayOfPointersByFieldName: field_name is not array" << std::endl;
 					return ret;
 				}
+				std::cout << field_name << " array instances size: "<< array_instance->array_instances.size() << std::endl;
 				for (auto& instance : array_instance->array_instances) {
 					hkClassPointerInstance* ptr_instance = dynamic_cast<hkClassPointerInstance*>(instance);
 
@@ -1546,12 +1547,14 @@ namespace hkreflex {
 						std::cout << "hkClassRecordInstance::GetArrayOfPointersByFieldName: field_name is not array of pointers" << std::endl;
 						return ret;
 					}
-
+					std::cout << "handling a " << ptr_instance->ptr_instance->type->type_name << std::endl;
 					T* container = static_cast<T*>(hktypes::AllocateHolder(ptr_instance->ptr_instance));
 					if (ptr_instance->ptr_instance->GetValue(*container)) {
 						ret.push_back(container);
+						std::cout << ptr_instance->ptr_instance->type->type_name << " ptr_instance added: " << container << std::endl;
 					}
 					else {
+						std::cout << "hkClassRecordInstance::GetArrayOfPointersByFieldName: adding ptr_instance FAILED" << std::endl;
 						throw std::exception("Failed to get value of pointer instance");
 						delete container;
 					}
@@ -1574,14 +1577,20 @@ namespace hkreflex {
 					std::cout << "hkClassRecordInstance::GetPointerByFieldName: field_name is not pointer" << std::endl;
 					return ret;
 				}
-				
+				std::cout << "handling a " << ptr_instance->ptr_instance->type->type_name << std::endl;
 				ret = static_cast<T*>(hktypes::AllocateHolder(ptr_instance->ptr_instance));
+				std::cout << field_name << ": setting ptr_instance for " << ptr_instance->ptr_instance->type->type_name << std::endl;
+				if (ret == nullptr) {
+					std::cout << "hkClassRecordInstance::GetPointersByFieldName: no pointer allocated" << std::endl;
+				}
+				else {
+					std::cout << ptr_instance->ptr_instance->type->type_name  << " allocated pointer: " << ret << std::endl;
+				}
 				if (!ptr_instance->ptr_instance->GetValue(*ret)) {
 					std::cout << "hkClassRecordInstance::GetPointerByFieldName: Failed to get value of pointer instance" << std::endl;
 					delete ret;
 					ret = nullptr;
 				}
-
 				return ret;
 			}
 		}

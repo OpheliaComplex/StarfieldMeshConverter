@@ -896,6 +896,62 @@ namespace hktypes {
 		};
 	};
 
+	// new
+	
+	class hclMeshBoneDeformOperator : public hclOperator {
+	public:
+		using BaseType = hclOperator;
+		class TriangleBonePair : public hkHolderBase {
+		public:
+			using BaseType = void;
+			std::vector<hkMatrix4Holder> localBoneTransform;	// Offset: 96 Unk: 0
+			hkReal weight; // Offset: 0
+			hkUint16 triangleIndex; // Offset: 2
+
+			// Extra
+			bool FromInstance(const hkreflex::hkClassInstance* instance) override;
+			bool ToInstance(hkreflex::hkClassInstance* instance) override;
+			inline std::string GethkClassName() override { return "hclMeshBoneDeformOperator::TriangleBonePair"; };
+			inline std::string GetTranscriptId() override { return "hclMeshBoneDeformOperator::TriangleBonePair"; };
+			inline uint32_t GethkClassHash() override { return 2878957036; };
+			inline std::vector<std::pair<std::string, std::string>> GethkClassMembers() override {
+				return {
+					{ "localBoneTransform", "hkArray<hkMatrix4, hkContainerHeapAllocator>" },
+					{ "weight", "hkReal" },
+					{ "triangleIndex", "hkUint16" },
+				};
+			};
+			inline std::vector<std::pair<std::string, std::string>> GetTemplateArgs();
+		};
+
+		hkUint32 inputBufferIdx; // Offset: 72
+		hkUint32 outputTransformSetIdx; // Offset: 76
+
+		std::vector<hclMeshBoneDeformOperator::TriangleBonePair> triangleBonePairs;		//hkArray<hclMeshBoneDeformOperator::TriangleBonePair, hkContainerHeapAllocator> triangleBonePairs; // Offset: 80
+		std::vector<hkUint16> triangleBoneStartForBone;										//hkArray<hkUint16, hkContainerHeapAllocator> triangleBoneStartForBone;
+
+
+		// Extra
+		bool FromInstance(const hkreflex::hkClassInstance* instance) override;
+		bool ToInstance(hkreflex::hkClassInstance* instance) override;
+		inline std::string GethkClassName() override { return "hclMeshBoneDeformOperator"; };
+		inline std::string GetTranscriptId() override { return "hclMeshBoneDeformOperator"; };
+		inline uint32_t GethkClassHash() override { return 1364889027; };
+		inline std::vector<std::pair<std::string, std::string>> GethkClassMembers() override {
+			return {
+				{ "inputBufferIdx", "hkUint32" },
+				{ "outputTransformSetIdx", "hkUint32" },
+				{ "triangleBonePairs", "hkArray<hclMeshBoneDeformOperator::TriangleBonePair, hkContainerHeapAllocator>" },
+				{ "triangleBoneStartForBone", "hkArray<hkUint16, hkContainerHeapAllocator>" },
+			};
+		};
+		inline std::vector<std::pair<std::string, std::string>> GetTemplateArgs();
+	};
+
+	//
+
+
+
 	class hclCopyVerticesOperator : public hclOperator {
 	public:
 		using BaseType = hclOperator;

@@ -298,7 +298,6 @@ bool hktypes::hclSimpleMeshBoneDeformOperator::TriangleBonePair::FromInstance(co
 
 	class_instance->GetInstanceByFieldName("boneOffset")->GetValue(boneOffset);
 	class_instance->GetInstanceByFieldName("triangleOffset")->GetValue(triangleOffset);
-
 	return true;
 }
 
@@ -323,7 +322,7 @@ bool hktypes::hclSimpleMeshBoneDeformOperator::FromInstance(const hkreflex::hkCl
 	}
 
 	hclOperator::FromInstance(class_instance->GetInstanceByFieldName("class_parent"));
-
+	std::cout << class_instance->type->type_name << std::endl;
 	class_instance->GetInstanceByFieldName("inputBufferIdx")->GetValue(inputBufferIdx);
 	class_instance->GetInstanceByFieldName("outputTransformSetIdx")->GetValue(outputTransformSetIdx);
 	class_instance->GetInstanceByFieldName("triangleBonePairs")->GetValue(triangleBonePairs);
@@ -348,6 +347,78 @@ bool hktypes::hclSimpleMeshBoneDeformOperator::ToInstance(hkreflex::hkClassInsta
 
 	return true;
 }
+
+// NEW MESH BONE DEFORM OP
+
+bool hktypes::hclMeshBoneDeformOperator::TriangleBonePair::FromInstance(const hkreflex::hkClassInstance* instance) {
+	auto class_instance = dynamic_cast<const hkreflex::hkClassRecordInstance*>(instance);
+	if (class_instance->type->type_name != "hclMeshBoneDeformOperator::TriangleBonePair") {
+		std::cout << "Mismatching type conversion from " << class_instance->type->type_name << " to hclMeshBoneDeformOperator::TriangleBonePair" << std::endl;
+		return false;
+	}
+	class_instance->GetInstanceByFieldName("localBoneTransform")->GetValue(localBoneTransform);
+	class_instance->GetInstanceByFieldName("weight")->GetValue(weight);
+	class_instance->GetInstanceByFieldName("triangleIndex")->GetValue(triangleIndex);
+	return true;
+}
+
+bool hktypes::hclMeshBoneDeformOperator::TriangleBonePair::ToInstance(hkreflex::hkClassInstance* instance) {
+	auto class_instance = dynamic_cast<hkreflex::hkClassRecordInstance*>(instance);
+	if (class_instance->type->type_name != "hclMeshBoneDeformOperator::TriangleBonePair") {
+		std::cout << "Mismatching type conversion from hclMeshBoneDeformOperator::TriangleBonePair to " << class_instance->type->type_name << std::endl;
+		return false;
+	}
+
+	std::vector<hkMatrix4Holder> _localBoneTransform;
+	for (int i = 0; i < localBoneTransform.size(); i++) {
+		_localBoneTransform.push_back(localBoneTransform[i]);
+	}
+
+
+	class_instance->GetInstanceByFieldName("localBoneTransform")->SetValue(_localBoneTransform);
+	//class_instance->GetInstanceByFieldName("localBoneTransform")->SetValue(localBoneTransform);
+	class_instance->GetInstanceByFieldName("weight")->SetValue(weight);
+	class_instance->GetInstanceByFieldName("triangleIndex")->SetValue(triangleIndex);
+
+	return true;
+}
+
+bool hktypes::hclMeshBoneDeformOperator::FromInstance(const hkreflex::hkClassInstance* instance) {
+	auto class_instance = dynamic_cast<const hkreflex::hkClassRecordInstance*>(instance);
+	if (class_instance->type->type_name != "hclMeshBoneDeformOperator") {
+		std::cout << "Mismatching type conversion from " << class_instance->type->type_name << " to hclMeshBoneDeformOperator" << std::endl;
+		return false;
+	}
+
+	hclOperator::FromInstance(class_instance->GetInstanceByFieldName("class_parent"));
+	std::cout << class_instance->type->type_name << std::endl;
+	class_instance->GetInstanceByFieldName("inputBufferIdx")->GetValue(inputBufferIdx);
+	class_instance->GetInstanceByFieldName("outputTransformSetIdx")->GetValue(outputTransformSetIdx);
+	class_instance->GetInstanceByFieldName("triangleBonePairs")->GetValue(triangleBonePairs);
+	class_instance->GetInstanceByFieldName("triangleBoneStartForBone")->GetValue(triangleBoneStartForBone);
+	return true;
+}
+
+bool hktypes::hclMeshBoneDeformOperator::ToInstance(hkreflex::hkClassInstance* instance) {
+	auto class_instance = dynamic_cast<hkreflex::hkClassRecordInstance*>(instance);
+	if (class_instance->type->type_name != "hclMeshBoneDeformOperator") {
+		std::cout << "Mismatching type conversion from hclMeshBoneDeformOperator to " << class_instance->type->type_name << std::endl;
+		return false;
+	}
+
+	std::cout << "Toinstance meshbonedeformop" << std::endl;
+	hclOperator::ToInstance(class_instance->GetInstanceByFieldName("class_parent"));
+
+	class_instance->GetInstanceByFieldName("inputBufferIdx")->SetValue(inputBufferIdx);
+	class_instance->GetInstanceByFieldName("outputTransformSetIdx")->SetValue(outputTransformSetIdx);
+	class_instance->GetInstanceByFieldName("triangleBonePairs")->SetValue(triangleBonePairs);
+	class_instance->GetInstanceByFieldName("triangleBoneStartForBone")->SetValue(triangleBoneStartForBone);
+
+	return true;
+}
+
+//
+
 
 bool hktypes::hclCopyVerticesOperator::FromInstance(const hkreflex::hkClassInstance* instance) {
 	auto class_instance = dynamic_cast<const hkreflex::hkClassRecordInstance*>(instance);

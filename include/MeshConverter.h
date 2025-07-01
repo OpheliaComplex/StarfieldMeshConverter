@@ -5,6 +5,7 @@
 #include "hkPhysics.h"
 #include "Common.h"
 
+
 //#define _DLLEXPORT
 
 #ifdef _DLLEXPORT
@@ -13,6 +14,10 @@
 #define DLL
 #endif
 extern "C" {
+	DLL uint32_t extractPhysicsData(const char* input_file);
+
+	DLL void deserializeClothTools();
+
 	DLL uint32_t ExportMesh(const char* json_data,
 		const char* output_file,
 		float max_border,
@@ -80,4 +85,7 @@ extern "C" {
 	DLL const char* ImportNif(const char* input_file, bool export_havok_readable, const char* readable_filepath);
 
 	DLL uint32_t ComposePhysicsData(const char* json_data, uint32_t platform, const char* transcript_path, const char* output_file, bool export_readable);
+
+	DLL uint32_t ComposePhysicsDatax64(const char* json_data, const char* transcript_path, const char* output_file, bool export_readable);
+
 }

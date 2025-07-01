@@ -540,6 +540,14 @@ bool hktypes::hkRefCountedProperties::Entry::ToInstance(hkreflex::hkClassInstanc
 	return true;
 }
 
+#include "hkaAnimationContainer.h"
+#include "hclClothContainer.h"
+
+bool hktypes::hkRootLevelContainer::SwapNamedVariantOrders() {
+	std::cout << "flipping "<< this->namedVariants.at(0).className << " with " << this->namedVariants.at(1).className << std::endl;
+	std::reverse(this->namedVariants.begin(), this->namedVariants.end());
+	return true;
+}
 
 bool hktypes::hkRootLevelContainer::NamedVariant::FromInstance(const hkreflex::hkClassInstance* instance)
 {
@@ -548,11 +556,36 @@ bool hktypes::hkRootLevelContainer::NamedVariant::FromInstance(const hkreflex::h
 		std::cout << "hkRootLevelContainer::NamedVariant::FromInstance: type_name is not hkRootLevelContainer::NamedVariant" << std::endl;
 		return false;
 	}
-
+	
 	class_instance->GetInstanceByFieldName("name")->GetValue(this->name);
+	std::cout << this->name << std::endl;
 	class_instance->GetInstanceByFieldName("className")->GetValue(this->className);
-	this->variant = class_instance->GetPointersByFieldName<hkReferencedObject>("variant");
-
+	std::cout << this->className << std::endl;
+	auto _variant = class_instance->GetPointersByFieldName<hkReferencedObject>("variant");
+	std::cout << _variant->GethkClassName() << std::endl;
+	if (_variant->GethkClassName() == "hkaAnimationContainer") {
+		std::cout << "replacing hkaAnimationContainer with hkaSkeleton" << std::endl;
+		// get the hkaSkeleton instead
+		auto _hkaSkeleton = dynamic_cast<const hkaAnimationContainer*>(_variant)->skeletons.at(0);
+		this->variant = _hkaSkeleton;
+		this->name = ""; //is nameless
+		this->className = "hkaSkeleton";
+		std::cout << "replacing done " << std::endl;
+	}
+	else if (_variant->GethkClassName() == "hclClothContainer"){
+		std::cout << "replacing hclClothContainer with hclClothDatas" << std::endl;
+		// get the hkaSkeleton instead
+		// get the hclClothDatas instead
+		auto _hclClothDatas = dynamic_cast<const hclClothContainer*>(_variant)->clothDatas.at(0);
+		this->variant = _hclClothDatas;
+		this->name = ""; //is nameless
+		this->className = "hclClothData";
+		std::cout << "replacing done " << std::endl;
+	}
+	else {
+		std::cout << "hkRootLevelContainer that shouldn't be modified: " << _variant->GethkClassName() << std::endl;
+		this->variant = _variant;
+	}
 	return true;
 }
 
@@ -627,6 +660,8 @@ hktypes::hkRootLevelContainer::NamedVariant& hktypes::hkRootLevelContainer::GetN
 	}
 	throw std::runtime_error("NamedVariant not found");
 }
+
+
 
 hktypes::hclBufferedMeshObj& hktypes::hclBufferedMeshObj::FromSimClothData(hclSimClothData* simClothData)
 {

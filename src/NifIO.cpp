@@ -8,7 +8,7 @@ bool nif::NifIO::Deserialize(const std::string filename)
 	std::string extension = filename.substr(filename.find_last_of(".") + 1);
 	if (extension != "nif")
 	{
-		std::cout << "Invalid file extension" << std::endl;
+		std::cout << "Invalid file extension" << filename << std::endl;
 		return false;
 	}
 

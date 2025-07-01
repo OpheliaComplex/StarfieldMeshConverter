@@ -82,6 +82,9 @@ bool hkphysics::hkReflDataDeserializer::Deserialize(const uint8_t* data, size_t 
 		this->root_level_container = new hktypes::hkRootLevelContainer();
 		root_ctn_insts[0]->GetValue(*this->root_level_container);
 	}
+	else {
+		std::cout << "Warning: more than one hkRootLevelContainer." << std::endl;
+	}
 
 	return true;
 }
@@ -390,13 +393,17 @@ bool hkphysics::hkReflDataSerializeContext::RegisterClassesToTranscriptor() {
 
 size_t hkphysics::hkReflDataSerializer::Serialize(std::ostream& data_stream)
 {
+	std::cout << "Starting serialization." << std::endl;
 	this->Clear();
 	this->serialize_string_table.clear();
 
+	std::cout << "Building data chunks." << std::endl;
 	this->_build_data_chunks();
 
-	auto& transcriptor = hkreflex::hkTypeTranscriptor::GetInstance();
 
+
+	auto& transcriptor = hkreflex::hkTypeTranscriptor::GetInstance();
+	std::cout << "Instantiating transcriptor on root container." << std::endl;
 	this->root_level_instance = transcriptor.Instantiate(*this->root_level_container, this);
 
 	if (!this->root_level_instance) {

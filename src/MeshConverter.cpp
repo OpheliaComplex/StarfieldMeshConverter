@@ -1,4 +1,116 @@
 #include "MeshConverter.h"
+#include "hkTypes.h"
+
+uint32_t extractPhysicsData(const char* input_file) {
+
+	// load data
+	hkphysics::hkReflDataDeserializer data;
+	data.Deserialize(input_file, true);
+	std::cout << "Deserialize done, setting hkrootlevelcontainer pointer" << std::endl;
+	data.ExtractClasses(); //otherwise doesn't set the root_level_container pointer ????
+	std::cout << "data root: " << data.root_level_container << std::endl;
+
+	// I've made hkRootLevelContainer automatically ignore hclClothContainer and hkaAnimationContainers
+	// However, I also have to reverse the order of the named variants (skele first, cloth data second)
+	// TODO check if need to flip?
+	dynamic_cast<hktypes::hkRootLevelContainer*>(data.root_level_container)->SwapNamedVariantOrders();
+
+	//output to human readable
+	std::cout << "dumping instances to readable .txt" << std::endl;
+	auto instances = data.root_level_instance->dump();
+	std::ofstream file1("F:\\sf_projects\\StarfieldMeshConverter\\x64\\Release\\generated_code\\Instances.json");
+	file1 << instances;
+	file1.close();
+
+	if (true)
+	{
+		//output to binary .hkx
+		std::cout << "serializing to binary .hkx" << std::endl;
+		hkphysics::hkReflDataSerializer serializer;
+		serializer.root_level_container = data.root_level_container;
+		std::cout << "serialiser root" << serializer.root_level_container << std::endl;
+		std::ofstream file2("F:\\sf_projects\\StarfieldMeshConverter\\x64\\Release\\testdata\\out.hkx", std::ios::binary);
+		if (!file2.is_open()) {
+			std::cout << "Failed to open output file." << std::endl;
+			return 15; // Return an error code
+		}
+		serializer.Serialize(file2);
+		file2.close();
+	}
+
+	return 0;
+}
+
+// seem to crash on calling nlohmann json, tried different versions - the 887kb hpp version (around 12 aug 22 I think seems to work, newer gives unresolved externals)
+uint32_t ComposePhysicsDatax64(const char* json_data, const char* transcript_path, const char* output_file, bool export_readable)
+{
+	std::cout << "Loading json: " << json_data << std::endl;
+	std::ifstream ifs("generated_code//Instances2.json");
+
+	if (nlohmann::json::accept(ifs))
+		std::cout << "Valid json, loading" << std::endl;
+	else
+		std::cout << "INVALID JSON" << std::endl;
+
+	ifs.seekg(0);
+	nlohmann::json jsonData = nlohmann::json::parse(ifs);
+	std::cout << "Loaded json." << std::endl;
+	hkphysics::hkPhysicsDataBuilder builder;
+	std::cout << "Initialized builder." << std::endl;
+	builder.build_target_platform = (hkphysics::hkPhysicsDataBuilder::Platform)2;
+
+	if (!hkreflex::hkTypeTranscriptor::SetTranscriptPath(transcript_path)) {
+		std::cout << "Failed to set transcript path." << std::endl;
+		return 13; // Return an error code
+	}
+
+	auto& transcript = hkreflex::hkTypeTranscriptor::GetInstance();
+	std::cout << "Initialized typetranscriptor." << std::endl;
+	transcript.DeserializeTranscripts(transcript_path);
+	std::cout << "Parsing json." << std::endl;
+	if (!builder.ParseJson(jsonData) || !builder.build_target_finished) {
+		std::cout << "Physics data build failed." << std::endl;
+		return 14; // Return an error code
+	}
+
+	hkphysics::hkReflDataSerializer serializer;
+	serializer.root_level_container = &builder.GetTarget();
+
+	std::ofstream file(output_file, std::ios::binary);
+	if (!file.is_open()) {
+		std::cout << "Failed to open output file." << std::endl;
+		return 15; // Return an error code
+	}
+
+	serializer.Serialize(file);
+	file.close();
+
+	if (export_readable) {
+		std::cout << "Exporting readable data..." << std::endl;
+		hkphysics::hkReflDataDeserializer deserializer;
+
+		std::ifstream file2(output_file, std::ios::binary);
+		if (!file2.is_open()) {
+			std::cout << "Failed to open output file." << std::endl;
+			return 16; // Return an error code
+		}
+
+		size_t data_size = utils::read<uint32_t>(file2, 1, true)[0];
+		file2.seekg(0, std::ios::beg);
+		deserializer.Deserialize(file2, data_size);
+		file2.close();
+
+		std::cout << "Ensuring IO equality..." << std::endl;
+		deserializer.root_level_instance->assert_equals(serializer.root_level_instance);
+
+		auto instances = deserializer.root_level_instance->dump();
+		std::ofstream file_i(std::string(output_file) + "_debug.txt");
+		file_i << instances;
+		file_i.close();
+	}
+
+	return 0;
+}
 
 uint32_t ExportMesh(const char* json_data, const char* output_file, float scale, bool smooth_edge_normal, bool normalize_weights, bool do_optimization)
 {
@@ -398,8 +510,9 @@ uint32_t ComposePhysicsData(const char* json_data, uint32_t platform, const char
 {
 	nlohmann::json jsonData = nlohmann::json::parse(json_data);
 
+	std::cout << "Loaded json." << std::endl;
 	hkphysics::hkPhysicsDataBuilder builder;
-
+	std::cout << "Initialized builder." << std::endl;
 	builder.build_target_platform = (hkphysics::hkPhysicsDataBuilder::Platform)platform;
 
 	if (!hkreflex::hkTypeTranscriptor::SetTranscriptPath(transcript_path)){
@@ -408,8 +521,9 @@ uint32_t ComposePhysicsData(const char* json_data, uint32_t platform, const char
 	}
 
 	auto& transcript = hkreflex::hkTypeTranscriptor::GetInstance();
+	std::cout << "Initialized typetranscriptor." << std::endl;
 	transcript.DeserializeTranscripts(transcript_path);
-
+	std::cout << "Parsing json." << std::endl;
 	if (!builder.ParseJson(jsonData) || !builder.build_target_finished) {
 		std::cout << "Physics data build failed." << std::endl;
 		return 14; // Return an error code
@@ -453,3 +567,4 @@ uint32_t ComposePhysicsData(const char* json_data, uint32_t platform, const char
 
 	return 0;
 }
+

@@ -2150,7 +2150,9 @@ bool hkreflex::hkTypeTranscriptor::RegisterClass(hkreflex::hkClassBase* hk_class
 
 hkreflex::hkClassBase* hkreflex::hkTypeTranscriptor::AllocateClassByUniqueId(MapIdType id, bool include_definition)
 {
+
 	if (!is_valid_id(id)) {
+		std::cout << "invalid " << id << std::endl;
 		return nullptr;
 	}
 
@@ -2159,6 +2161,8 @@ hkreflex::hkClassBase* hkreflex::hkTypeTranscriptor::AllocateClassByUniqueId(Map
 	}
 
 	if (this->type_transcripts.find(id) == this->type_transcripts.end()) {
+		std::cout << "not found " << id << std::endl;
+		std::cout << "not found " << id << std::endl;
 		throw std::runtime_error("Class not found");
 	}
 
@@ -2196,7 +2200,6 @@ hkreflex::hkClassBase* hkreflex::hkTypeTranscriptor::AllocateClassByUniqueId(Map
 		if (is_valid_id(properties.parent_class_id)) {
 			hk_class->parent_class = AllocateClassByUniqueId(properties.parent_class_id);
 		}
-
 		hk_class->optionals = static_cast<hkreflex::Optional>(properties.optionals);
 		auto& optional = hk_class->optionals;
 		if (optional & hkreflex::Optional::Format) { // 0b00000001

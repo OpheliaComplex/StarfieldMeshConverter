@@ -5,6 +5,9 @@
 #include "hclClothState.h"
 #include "hclOperator.h"
 #include "hclSimClothData.h"
+#include "hkPhysics.h"
+#include "hkaAnimationContainer.h"
+#include "hclClothContainer.h"
 
 hktypes::hkHolderBase* hktypes::AllocateHolder(const hkreflex::hkClassInstance* instance)
 {
@@ -66,6 +69,9 @@ hktypes::hkHolderBase* hktypes::AllocateHolder(const hkreflex::hkClassInstance* 
 	else if (class_instance->type->type_name == "hclSimpleMeshBoneDeformOperator") {
 		return new hclSimpleMeshBoneDeformOperator();
 	}
+	else if (class_instance->type->type_name == "hclMeshBoneDeformOperator") {
+		return new hclMeshBoneDeformOperator();
+	}
 	else if (class_instance->type->type_name == "hclCopyVerticesOperator") {
 		return new hclCopyVerticesOperator();
 	}
@@ -99,13 +105,28 @@ hktypes::hkHolderBase* hktypes::AllocateHolder(const hkreflex::hkClassInstance* 
 	else if (class_instance->type->type_name == "hclBendStiffnessConstraintSet") {
 		return new hclBendStiffnessConstraintSet();
 	}
+	else if (class_instance->type->type_name == "hclStretchLinkConstraintSet") {
+		std::cout << " initializing a hclStretchLinkConstraintSet" << std::endl;
+		return new hclStretchLinkConstraintSet();
+	}
+	else if (class_instance->type->type_name == "hclStretchLinkConstraintSetMx") {
+		std::cout << " initializing a hclStretchLinkConstraintSetMx" << std::endl;
+		return new hclStretchLinkConstraintSetMx();
+	}
 	else if (class_instance->type->type_name == "hclCapsuleShape") {
 		return new hclCapsuleShape();
 	}
 	else if (class_instance->type->type_name == "hclTaperedCapsuleShape") {
 		return new hclTaperedCapsuleShape();
 	}
-
+	else if (class_instance->type->type_name == "hclClothContainer") {
+		return new hclClothContainer();
+	}
+	else if (class_instance->type->type_name == "hkaAnimationContainer") {
+		return new hkaAnimationContainer();
+	}
+	std::cout << "AllocateHolder: Unknown type: " + class_instance->type->type_name << std::endl;
+	std::cout << "AllocateHolder: Unknown type: " + class_instance->type->type_name << std::endl;
 	throw std::runtime_error("AllocateHolder: Unknown type: " + class_instance->type->type_name);
 	return nullptr;
 };

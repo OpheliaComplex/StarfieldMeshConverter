@@ -77,4 +77,5 @@ namespace hktypes{
 		inline std::vector<std::pair<std::string, std::string>> GetTemplateArgs();
 	};
 
+
 }

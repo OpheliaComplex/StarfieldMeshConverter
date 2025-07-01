@@ -2470,6 +2470,52 @@
     "version": 0
   },
   {
+    "alignment": 8,
+    "class_name": "hclMeshBoneDeformOperator",
+    "declared": 1,
+    "defined": 1,
+    "fields": [
+      {
+        "flags": 32,
+        "name": "inputBufferIdx",
+        "offset": 72,
+        "type_id": "hkUint32",
+        "unk_value": 0
+      },
+      {
+        "flags": 32,
+        "name": "outputTransformSetIdx",
+        "offset": 76,
+        "type_id": "hkUint32",
+        "unk_value": 0
+      },
+      {
+        "flags": 32,
+        "name": "triangleBonePairs",
+        "offset": 80,
+        "type_id": "hkArray<hclMeshBoneDeformOperator::TriangleBonePair, hkContainerHeapAllocator>",
+        "unk_value": 0
+      },
+      {
+        "flags": 32,
+        "name": "triangleBoneStartForBone",
+        "offset": 96,
+        "type_id": "hkArray<hkUint16, hkContainerHeapAllocator>",
+        "unk_value": 0
+      }
+    ],
+    "format": 7,
+    "hash": 1364889027,
+    "id": "hclMeshBoneDeformOperator",
+    "optionals": 41,
+    "parent_class_id": "hclOperator",
+    "size": 112,
+    "sub_type_id": "",
+    "template_args": [],
+    "type_flags": 0,
+    "version": 0
+  },
+  {
     "alignment": 4,
     "class_name": "hkHandle",
     "declared": 1,
@@ -8740,6 +8786,95 @@
     "format": 7,
     "hash": 2878957036,
     "id": "hclSimpleMeshBoneDeformOperator::TriangleBonePair",
+    "optionals": 41,
+    "parent_class_id": "",
+    "size": 4,
+    "sub_type_id": "",
+    "template_args": [],
+    "type_flags": 0,
+    "version": 0
+  },
+  {
+    "alignment": 8,
+    "class_name": "hkArray",
+    "declared": 1,
+    "defined": 1,
+    "fields": [
+      {
+        "flags": 34,
+        "name": "m_data",
+        "offset": 0,
+        "type_id": "T*<void>",
+        "unk_value": 0
+      },
+      {
+        "flags": 34,
+        "name": "m_size",
+        "offset": 8,
+        "type_id": "int",
+        "unk_value": 0
+      },
+      {
+        "flags": 34,
+        "name": "m_capacityAndFlags",
+        "offset": 12,
+        "type_id": "int",
+        "unk_value": 0
+      }
+    ],
+    "format": 8,
+    "hash": 4041920656,
+    "id": "hkArray<hclMeshBoneDeformOperator::TriangleBonePair, hkContainerHeapAllocator>",
+    "optionals": 43,
+    "parent_class_id": "",
+    "size": 16,
+    "sub_type_id": "hclMeshBoneDeformOperator::TriangleBonePair",
+    "template_args": [
+      {
+        "name": "tT",
+        "type_id": "hclMeshBoneDeformOperator::TriangleBonePair",
+        "value": 0
+      },
+      {
+        "name": "tAllocator",
+        "type_id": "hkContainerHeapAllocator",
+        "value": 0
+      }
+    ],
+    "type_flags": 0,
+    "version": 0
+  },
+  {
+    "alignment": 2,
+    "class_name": "hclMeshBoneDeformOperator::TriangleBonePair",
+    "declared": 1,
+    "defined": 1,
+    "fields": [
+      {
+        "flags": 32,
+        "name": "localBoneTransform",
+        "offset": 0,
+        "type_id": "hkArray<hkMatrix4, hkContainerHeapAllocator>",
+        "unk_value": 0
+      },
+      {
+        "flags": 32,
+        "name": "weight",
+        "offset": 2,
+        "type_id": "hkReal",
+        "unk_value": 0
+      },
+      {
+        "flags": 32,
+        "name": "triangleIndex",
+        "offset": 4,
+        "type_id": "hkUint16",
+        "unk_value": 0
+      }
+    ],
+    "format": 7,
+    "hash": 2878957036,
+    "id": "hclMeshBoneDeformOperator::TriangleBonePair",
     "optionals": 41,
     "parent_class_id": "",
     "size": 4,

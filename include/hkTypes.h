@@ -257,6 +257,7 @@ namespace hktypes {
 		hkBitField operator|=(const hkBitField& other);
 	};
 
+
 	class hkRefCountedProperties : public hkReferencedObject {
 	public:
 		using BaseType = hkReferencedObject;
@@ -327,6 +328,7 @@ namespace hktypes {
 		// Extra
 		bool FromInstance(const hkreflex::hkClassInstance* instance) override;
 		bool ToInstance(hkreflex::hkClassInstance* instance) override;
+		bool SwapNamedVariantOrders();
 		inline std::string GethkClassName() override { return "hkRootLevelContainer"; };
 		inline std::string GetTranscriptId() override { return "hkRootLevelContainer"; };
 		inline uint32_t GethkClassHash() override { return 54921221; };
@@ -338,6 +340,7 @@ namespace hktypes {
 		std::vector<hkReferencedObject*> GetNamedVariantRefs(std::string type_name, std::string instance_name = "");
 		NamedVariant& GetNamedVariant(std::string type_name, std::string instance_name = "");
 	};
+
 
 	class hclBufferedMeshObj {
 	public:

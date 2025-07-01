@@ -225,6 +225,8 @@ void main() {
 	file1.close();
 	return;
 }
+
+
 void ____main() {
 	hkphysics::hkReflDataDeserializer data;
 
@@ -249,6 +251,35 @@ void ____main() {
 	file1 << instance_literal;
 	file1.close();
 
+	return;
+}
+
+void deserializeClothTools() {
+	hkphysics::hkReflDataDeserializer data;
+
+	//data.Deserialize("C:\\repo\\MeshConverter\\UnkBlocks\\bhkPhysicsSystem\\bed_double01-bhkPhysicsSystem_3.bin", true);
+	data.Deserialize("F:\\sf_projects\\StarfieldMeshConverter\\x64\\Release\\SkirtSim.hkx", true);
+
+	auto updated_transcript = data.RegisterClassesToTranscriptor();
+
+	if (updated_transcript) {
+		data.SaveToCxxCode();
+
+		auto literals = data.classes_to_literal(true, true, true);
+
+		// Save the string into a file
+		std::ofstream file_l("F:\\sf_projects\\StarfieldMeshConverter\\x64\\Release\\SkirtSimGenerated\\hkGenerated.h");
+		file_l << literals;
+		file_l.close();
+
+	}
+
+	auto instances = data.root_level_instance->dump();
+
+
+	std::ofstream file1("F:\\sf_projects\\StarfieldMeshConverter\\x64\\Release\\SkirtSimGenerated\\SkirtSimInstances.txt");
+	file1 << instances;
+	file1.close();
 	return;
 }
 
@@ -415,3 +446,5 @@ void _main() {
 	std::cout << "complete" << std::endl;
 	return;
 }
+
+

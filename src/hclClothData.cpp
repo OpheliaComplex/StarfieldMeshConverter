@@ -229,6 +229,7 @@ bool hktypes::hclTransformSetDefinition::ToInstance(hkreflex::hkClassInstance* i
 	return true;
 }
 
+
 bool hktypes::hclClothData::FromInstance(const hkreflex::hkClassInstance* instance)
 {
 	auto class_instance = dynamic_cast<const hkreflex::hkClassRecordInstance*>(instance);
