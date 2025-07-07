@@ -28,7 +28,7 @@ uint32_t extractPhysicsData(const char* input_file) {
 		std::cout << "serializing to binary .hkx" << std::endl;
 		hkphysics::hkReflDataSerializer serializer;
 		serializer.root_level_container = data.root_level_container;
-		std::cout << "serialiser root" << serializer.root_level_container << std::endl;
+		std::cout << "serialiser root " << serializer.root_level_container << std::endl;
 		std::ofstream file2("F:\\sf_projects\\StarfieldMeshConverter\\x64\\Release\\testdata\\out.hkx", std::ios::binary);
 		if (!file2.is_open()) {
 			std::cout << "Failed to open output file." << std::endl;
@@ -37,7 +37,7 @@ uint32_t extractPhysicsData(const char* input_file) {
 		serializer.Serialize(file2);
 		file2.close();
 	}
-
+	std::cout << "Serializing done" << std::endl;
 	return 0;
 }
 

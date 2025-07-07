@@ -12,8 +12,16 @@ bool hktypes::hkQsTransformf::FromInstance(const hkreflex::hkClassInstance* inst
 	auto r_inst = class_instance->GetArrayByFieldName<double>("rotation");
 	auto s_inst = class_instance->GetArrayByFieldName<double>("scale");
 
+	//
+	// std::cout << "Scale " << s_inst[3] << std::endl;
+	/*
+	printf("\r\n(%f, %f, %f, %f)\r\n", t_inst[0], t_inst[1], t_inst[2], t_inst[3]);
+	printf("(%f, %f, %f, %f)\r\n", r_inst[0], r_inst[1], r_inst[2], r_inst[3]);
+	printf("(%f, %f, %f, %f)\r\n", s_inst[0], s_inst[1], s_inst[2], s_inst[3]);
+	*/
+
 	this->translation = Eigen::Vector4f(t_inst[0], t_inst[1], t_inst[2], t_inst[3]);
-	this->rotation = Eigen::Quaternionf(r_inst[3], r_inst[0], r_inst[1], r_inst[2]);
+	this->rotation = Eigen::Quaternionf(r_inst[3], r_inst[0], r_inst[1], r_inst[2]);//?? wxyz instead of xyzw?
 	this->scale = Eigen::Vector4f(s_inst[0], s_inst[1], s_inst[2], s_inst[3]);
 
 	return true;
@@ -201,11 +209,21 @@ bool hktypes::hkaSkeleton::FromInstance(const hkreflex::hkClassInstance* instanc
 		auto parent_index = parent_indices[i];
 		if (parent_index == -1) {
 			this->root = bone;
+			//force rotation to nothing
+			printf("Root bone: %s\r\n", bone->name.c_str());
+			printf("(%f, %f, %f, %f)\r\n", reference_pose[i].rotation.w(), reference_pose[i].rotation.x(), reference_pose[i].rotation.y(), reference_pose[i].rotation.z());
 			root->SetTransform(reference_pose[i]);
 		}
 		else {
 			bone->parent = bones[parent_index];
 			bones[parent_index]->children.push_back(bone);
+			if (false) {  //strcmp(bone->name.c_str(), "Root") == 0 || strcmp(bone->name.c_str(), "HumanExportRoot")==0 || strcmp(bone->name.c_str(), "COM") == 0 || strcmp(bone->name.c_str(), "C_Hips") == 0
+				printf("%s\r\n", bone->name.c_str());
+				hkQsTransformf testRotater = reference_pose[i];
+				//print the rotations before changing
+				printf("(%f, %f, %f, %f)\r\n", reference_pose[i].rotation.w(), reference_pose[i].rotation.x(), reference_pose[i].rotation.y(), reference_pose[i].rotation.z());
+			}
+
 			bone->SetTransform(reference_pose[i]);
 		}
 	}
