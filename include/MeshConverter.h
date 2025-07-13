@@ -16,7 +16,7 @@
 extern "C" {
 	DLL uint32_t extractPhysicsData(const char* input_file);
 
-	DLL void deserializeClothTools();
+	DLL void deserializeClothTools(const char* input_file);
 
 	DLL uint32_t ExportMesh(const char* json_data,
 		const char* output_file,

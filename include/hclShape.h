@@ -105,4 +105,69 @@ namespace hktypes {
 
 		void FromParameters(const std::array<float,3> a_small, const std::array<float,3> a_big, const float a_smallRadius, const float a_bigRadius);
 	};
+
+	// convexhull
+
+	class hkAabb : public hkReferencedObject {
+	public:
+		using BaseType = hkReferencedObject; // I still think it's a hkReferencedObject?
+
+		//int type;	// Offset: 24 Unk: 0 need this??
+
+		/// The minimum boundary of the AABB (i.e., the coordinates of the corner with the lowest numerical values).
+		hkVector4Holder m_min;
+
+		/// The maximum boundary of the AABB (i.e., the coordinates of the corner with the highest numerical values).
+		hkVector4Holder m_max;
+
+		// Extra
+		bool FromInstance(const hkreflex::hkClassInstance* instance);// override; hkAabb doesn't inherit from some other class
+		bool ToInstance(hkreflex::hkClassInstance* instance);// override;
+		inline std::string GethkClassName() { return "hkAabb"; };
+		inline std::string GetTranscriptId() { return "hkAabb"; };
+		inline uint32_t GethkClassHash() { return 0; };
+		inline std::vector<std::pair<std::string, std::string>> GethkClassMembers() {
+			return {
+				{ "min", "hkVector4" },
+				{ "max", "hkVector4" },
+			};
+		};
+	};
+
+	class hclConvexGeometryShape : public hclShape {
+	public:
+		std::vector<uint16_t> m_tetrahedraGrid;	// Offset: 32 Unk: 0
+		std::vector<uint8_t> gridCells;	// Offset: 48 Unk: 0
+		std::vector<hkMatrix4Holder> tetrahedraEquations;	// Offset: 64 Unk: 0
+		hkTransform localFromWorld;	// Offset: 80 Unk: 0
+		hkTransform worldFromLocal;	// Offset: 144 Unk: 0
+		hkAabb objAabb;	// Offset: 208 Unk: 4
+		hkVector4Holder geomCentroid;	// Offset: 240 Unk: 0
+		hkVector4Holder invCellSize;	// Offset: 256 Unk: 0
+		hkUint16 gridRes;	// Offset: 272 Unk: 0
+
+		// Extra
+		bool FromInstance(const hkreflex::hkClassInstance* instance) override;
+		bool ToInstance(hkreflex::hkClassInstance* instance) override;
+		inline std::string GethkClassName() { return "hclConvexGeometryShape"; };
+		inline std::string GetTranscriptId() { return "hclConvexGeometryShape"; };
+		inline uint32_t GethkClassHash() { return 4196181205; };
+		inline std::vector<std::pair<std::string, std::string>> GethkClassMembers() {
+			return {
+				{ "tetrahedraGrid", "hkArray<hkUint16, hkContainerHeapAllocator>" },
+				{ "gridCells", "hkArray<hkUint8, hkContainerHeapAllocator>" },
+				{ "tetrahedraEquations", "hkArray<hkMatrix4, hkContainerHeapAllocator>" },
+				{ "localFromWorld", "hkTransform" },
+				{ "worldFromLocal", "hkTransform" },
+				{ "objAabb", "hkAabb" },
+				{ "geomCentroid", "hkVector4" },
+				{ "invCellSize", "hkVector4" },
+				{ "gridRes", "hkUint16" },
+			};
+		};
+
+		hclBufferedMeshObj ToVisualizeMeshObj() override;
+
+		//void FromParameters(const std::array<float, 3> a_small, const std::array<float, 3> a_big, const float a_smallRadius, const float a_bigRadius);
+	};
 }

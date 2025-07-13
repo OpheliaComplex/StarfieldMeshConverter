@@ -254,11 +254,11 @@ void ____main() {
 	return;
 }
 
-void deserializeClothTools() {
+void deserializeClothTools(const char* input_file) {
 	hkphysics::hkReflDataDeserializer data;
 
 	//data.Deserialize("C:\\repo\\MeshConverter\\UnkBlocks\\bhkPhysicsSystem\\bed_double01-bhkPhysicsSystem_3.bin", true);
-	data.Deserialize("F:\\sf_projects\\StarfieldMeshConverter\\x64\\Release\\SkirtSim.hkx", true);
+	data.Deserialize(input_file, true);
 
 	auto updated_transcript = data.RegisterClassesToTranscriptor();
 

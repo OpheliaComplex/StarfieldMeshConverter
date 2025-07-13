@@ -188,3 +188,94 @@ void hktypes::hclTaperedCapsuleShape::FromParameters(const std::array<float, 3> 
 
 	tanThetaVecNeg = hkVector4Holder(-tanTheta, -tanTheta, -tanTheta, -tanTheta);
 }
+
+bool hktypes::hkAabb::FromInstance(const hkreflex::hkClassInstance* instance)
+{
+	auto class_instance = dynamic_cast<const hkreflex::hkClassRecordInstance*>(instance);
+	if (class_instance->type->type_name != "hkAabb") {
+		std::cout << "hkAabb::FromInstance: Wrong type!" << std::endl;
+		return false;
+	}
+
+	class_instance->GetInstanceByFieldName("min")->GetValue(m_min);
+	class_instance->GetInstanceByFieldName("max")->GetValue(m_max);
+
+	return true;
+}
+
+bool hktypes::hkAabb::ToInstance(hkreflex::hkClassInstance* instance)
+{
+	auto class_instance = dynamic_cast<hkreflex::hkClassRecordInstance*>(instance);
+	if (class_instance->type->type_name != "hkAabb") {
+		std::cout << "hkAabb::ToInstance: Wrong type!" << std::endl;
+		return false;
+	}
+
+	class_instance->GetInstanceByFieldName("min")->SetValue(m_min);
+	class_instance->GetInstanceByFieldName("max")->SetValue(m_max);
+
+	return true;
+}
+
+
+bool hktypes::hclConvexGeometryShape::FromInstance(const hkreflex::hkClassInstance* instance)
+{
+	auto class_instance = dynamic_cast<const hkreflex::hkClassRecordInstance*>(instance);
+	if (class_instance->type->type_name != "hclConvexGeometryShape") {
+		std::cout << "hclConvexGeometryShape::FromInstance: Wrong type!" << std::endl;
+		return false;
+	}
+
+	class_instance->GetInstanceByFieldName("tetrahedraGrid")->GetValue(m_tetrahedraGrid);
+	class_instance->GetInstanceByFieldName("gridCells")->GetValue(gridCells);
+	class_instance->GetInstanceByFieldName("tetrahedraEquations")->GetValue(tetrahedraEquations);
+	class_instance->GetInstanceByFieldName("localFromWorld")->GetValue(localFromWorld);
+	class_instance->GetInstanceByFieldName("worldFromLocal")->GetValue(worldFromLocal);
+	class_instance->GetInstanceByFieldName("objAabb")->GetValue(objAabb);
+	class_instance->GetInstanceByFieldName("geomCentroid")->GetValue(geomCentroid);
+	class_instance->GetInstanceByFieldName("invCellSize")->GetValue(invCellSize);
+	class_instance->GetInstanceByFieldName("gridRes")->GetValue(gridRes);
+
+	return true;
+}
+
+bool hktypes::hclConvexGeometryShape::ToInstance(hkreflex::hkClassInstance* instance)
+{
+	auto class_instance = dynamic_cast<hkreflex::hkClassRecordInstance*>(instance);
+	if (class_instance->type->type_name != "hclConvexGeometryShape") {
+		std::cout << "hclConvexGeometryShape::ToInstance: Wrong type!" << std::endl;
+		return false;
+	}
+
+	class_instance->GetInstanceByFieldName("tetrahedraGrid")->SetValue(m_tetrahedraGrid);
+	class_instance->GetInstanceByFieldName("gridCells")->SetValue(gridCells);
+	class_instance->GetInstanceByFieldName("tetrahedraEquations")->SetValue(tetrahedraEquations);
+	class_instance->GetInstanceByFieldName("localFromWorld")->SetValue(localFromWorld);
+	class_instance->GetInstanceByFieldName("worldFromLocal")->SetValue(worldFromLocal);
+	class_instance->GetInstanceByFieldName("objAabb")->SetValue(objAabb);
+	class_instance->GetInstanceByFieldName("geomCentroid")->SetValue(geomCentroid);
+	class_instance->GetInstanceByFieldName("invCellSize")->SetValue(invCellSize);
+	class_instance->GetInstanceByFieldName("gridRes")->SetValue(gridRes);
+
+	return true;
+}
+
+hktypes::hclBufferedMeshObj hktypes::hclConvexGeometryShape::ToVisualizeMeshObj()
+{
+	printf("Calling hclConvexGeometryShape::ToVisualizeMeshObj() this probably doesn't work lol\r\n");
+	auto ret = hclBufferedMeshObj();
+	ret.shapeType = hclBufferedMeshObj::ShapeType::Capsule;
+	ret.name = "TaperedCapsule";
+
+	ret.capsuleBigRadius = 1.0f;
+	ret.capsuleSmallRadius = 1.0f;
+
+	/*
+	Eigen::Vector3f vec_start = big.ToVector3f();
+	Eigen::Vector3f vec_end = m_small.ToVector3f();
+
+	ret.capsuleStart = { vec_start[0], vec_start[1], vec_start[2] };
+	ret.capsuleEnd = { vec_end[0], vec_end[1], vec_end[2] };
+	*/
+	return ret;
+}
