@@ -536,6 +536,7 @@ bool hktypes::hclBendStiffnessConstraintSet::Link::FromInstance(const hkreflex::
 	class_instance->GetInstanceByFieldName("particleB")->GetValue(particleB);
 	class_instance->GetInstanceByFieldName("particleC")->GetValue(particleC);
 	class_instance->GetInstanceByFieldName("particleD")->GetValue(particleD);
+	std::cout << "bendstiffness: " << bendStiffness << std::endl;
 	return true;
 }
 
@@ -683,9 +684,13 @@ bool hktypes::hclBendStiffnessConstraintSetMx::Batch::FromInstance(const hkrefle
 		this->particlesD[i] = particlesD[i];
 	}
 
+	std::cout << "(";
 	for (int i = 0; i < 4; ++i) {
-		std::cout << "(" << particlesA[i] << ", " << particlesB[i] << ", " << particlesC[i] << ", " << particlesD[i] << "),\n";
+		//std::cout << "(" << particlesA[i] << ", " << particlesB[i] << ", " << particlesC[i] << ", " << particlesD[i] << "),\n";
+		std::cout << bendStiffnesses[i] << " ";
 	}
+	std::cout << ")\n";
+
 
 	return true;
 }
@@ -770,7 +775,8 @@ bool hktypes::hclBendStiffnessConstraintSetMx::Single::FromInstance(const hkrefl
 	class_instance->GetInstanceByFieldName("particleC")->GetValue(particleC);
 	class_instance->GetInstanceByFieldName("particleD")->GetValue(particleD);
 
-	std::cout << "(" << particleA << ", " << particleB << ", " << particleC << ", " << particleD << "),\n";
+	//std::cout << "(" << particleA << ", " << particleB << ", " << particleC << ", " << particleD << "),\n";
+	std::cout << "bendstiffness: " << bendStiffness << std::endl;
 
 	return true;
 }

@@ -260,6 +260,34 @@ bool hktypes::hclConvexGeometryShape::ToInstance(hkreflex::hkClassInstance* inst
 	return true;
 }
 
+
+bool hktypes::hclPlaneShape::FromInstance(const hkreflex::hkClassInstance* instance)
+{
+	auto class_instance = dynamic_cast<const hkreflex::hkClassRecordInstance*>(instance);
+	if (class_instance->type->type_name != "hclPlaneShape") {
+		std::cout << "hclPlaneShape::FromInstance: Wrong type!" << std::endl;
+		return false;
+	}
+
+	class_instance->GetInstanceByFieldName("planeEquation")->GetValue(planeEquation);
+
+	return true;
+}
+
+bool hktypes::hclPlaneShape::ToInstance(hkreflex::hkClassInstance* instance)
+{
+	auto class_instance = dynamic_cast<hkreflex::hkClassRecordInstance*>(instance);
+	if (class_instance->type->type_name != "hclPlaneShape") {
+		std::cout << "hclPlaneShape::ToInstance: Wrong type!" << std::endl;
+		return false;
+	}
+
+	class_instance->GetInstanceByFieldName("planeEquation")->SetValue(planeEquation);
+
+	return true;
+}
+
+
 hktypes::hclBufferedMeshObj hktypes::hclConvexGeometryShape::ToVisualizeMeshObj()
 {
 	printf("Calling hclConvexGeometryShape::ToVisualizeMeshObj() this probably doesn't work lol\r\n");
@@ -279,3 +307,24 @@ hktypes::hclBufferedMeshObj hktypes::hclConvexGeometryShape::ToVisualizeMeshObj(
 	*/
 	return ret;
 }
+
+hktypes::hclBufferedMeshObj hktypes::hclPlaneShape::ToVisualizeMeshObj()
+{
+	printf("Calling hclPlaneShape::ToVisualizeMeshObj() this probably doesn't work lol\r\n");
+	auto ret = hclBufferedMeshObj();
+	ret.shapeType = hclBufferedMeshObj::ShapeType::Capsule;
+	ret.name = "TaperedCapsule";
+
+	ret.capsuleBigRadius = 1.0f;
+	ret.capsuleSmallRadius = 1.0f;
+
+	/*
+	Eigen::Vector3f vec_start = big.ToVector3f();
+	Eigen::Vector3f vec_end = m_small.ToVector3f();
+
+	ret.capsuleStart = { vec_start[0], vec_start[1], vec_start[2] };
+	ret.capsuleEnd = { vec_end[0], vec_end[1], vec_end[2] };
+	*/
+	return ret;
+}
+

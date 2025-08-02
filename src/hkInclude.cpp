@@ -129,6 +129,10 @@ hktypes::hkHolderBase* hktypes::AllocateHolder(const hkreflex::hkClassInstance* 
 		std::cout << " initializing a hclConvexGeometryShape" << std::endl;
 		return new hclConvexGeometryShape();
 	}
+	else if (class_instance->type->type_name == "hclPlaneShape") {
+		std::cout << " initializing a hclPlaneShape" << std::endl;
+		return new hclPlaneShape();
+	}
 	std::cout << "AllocateHolder: Unknown type: " + class_instance->type->type_name << std::endl;
 	std::cout << "AllocateHolder: Unknown type: " + class_instance->type->type_name << std::endl;
 	throw std::runtime_error("AllocateHolder: Unknown type: " + class_instance->type->type_name);

@@ -170,4 +170,26 @@ namespace hktypes {
 
 		//void FromParameters(const std::array<float, 3> a_small, const std::array<float, 3> a_big, const float a_smallRadius, const float a_bigRadius);
 	};
+
+
+	class hclPlaneShape : public hclShape {
+	public:
+		hkVector4Holder planeEquation;	// Offset: 32 Unk: 0
+
+		// Extra
+		bool FromInstance(const hkreflex::hkClassInstance* instance) override;
+		bool ToInstance(hkreflex::hkClassInstance* instance) override;
+		inline std::string GethkClassName() { return "hclPlaneShape"; };
+		inline std::string GetTranscriptId() { return "hclPlaneShape"; };
+		inline uint32_t GethkClassHash() { return 4196181205; };
+		inline std::vector<std::pair<std::string, std::string>> GethkClassMembers() {
+			return {
+				{ "planeEquation", "hkVector4" },
+			};
+		};
+
+		hclBufferedMeshObj ToVisualizeMeshObj() override;
+
+		//void FromParameters(const std::array<float, 3> a_small, const std::array<float, 3> a_big, const float a_smallRadius, const float a_bigRadius);
+	};
 }

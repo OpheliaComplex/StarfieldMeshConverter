@@ -581,6 +581,9 @@ bool hktypes::hkRootLevelContainer::NamedVariant::FromInstance(const hkreflex::h
 		this->name = ""; //is nameless
 		this->className = "hclClothData";
 		std::cout << "replacing done " << std::endl;
+		int sizeOfCollidables = dynamic_cast<const hclClothContainer*>(_variant)->collidables.size();
+		if (sizeOfCollidables > 0)
+			printf("hkx has collidables, the actually hclCollidable mesh is lost with this implementation but I *think* it works in game, as a perinstancecollidable inside hclclothdata. \r\n");
 	}
 	else {
 		std::cout << "hkRootLevelContainer that shouldn't be modified: " << _variant->GethkClassName() << std::endl;
