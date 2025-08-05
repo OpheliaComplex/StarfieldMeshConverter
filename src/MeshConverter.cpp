@@ -1,7 +1,7 @@
 #include "MeshConverter.h"
 #include "hkTypes.h"
 
-uint32_t extractPhysicsData(const char* input_file) {
+uint32_t extractPhysicsData(const char* input_file, const char* output_file, const char* transcript_path) {
 
 	// load data
 	hkphysics::hkReflDataDeserializer data;
@@ -9,6 +9,12 @@ uint32_t extractPhysicsData(const char* input_file) {
 	std::cout << "Deserialize done, setting hkrootlevelcontainer pointer" << std::endl;
 	data.ExtractClasses(); //otherwise doesn't set the root_level_container pointer ????
 	std::cout << "data root: " << data.root_level_container << std::endl;
+
+	// To be able to call this function from elsewhere (i.e. blender) need to point to the transcript json
+	if (!hkreflex::hkTypeTranscriptor::SetTranscriptPath(transcript_path)) {
+		std::cout << "Failed to set transcript path." << std::endl;
+		return 13; // Return an error code
+	}
 
 	// I've made hkRootLevelContainer automatically ignore hclClothContainer and hkaAnimationContainers
 	// However, I also have to reverse the order of the named variants (skele first, cloth data second)
@@ -29,11 +35,12 @@ uint32_t extractPhysicsData(const char* input_file) {
 		hkphysics::hkReflDataSerializer serializer;
 		serializer.root_level_container = data.root_level_container;
 		std::cout << "serialiser root " << serializer.root_level_container << std::endl;
-		std::ofstream file2("F:\\sf_projects\\StarfieldMeshConverter\\x64\\Release\\testdata\\out.hkx", std::ios::binary);
+		std::ofstream file2(output_file, std::ios::binary);
 		if (!file2.is_open()) {
 			std::cout << "Failed to open output file." << std::endl;
 			return 15; // Return an error code
 		}
+		std::cout << "serializing to " << output_file << std::endl;
 		serializer.Serialize(file2);
 		file2.close();
 	}

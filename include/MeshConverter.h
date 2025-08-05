@@ -14,7 +14,7 @@
 #define DLL
 #endif
 extern "C" {
-	DLL uint32_t extractPhysicsData(const char* input_file);
+	DLL uint32_t extractPhysicsData(const char* input_file, const char* output_file, const char* transcript_path);
 
 	DLL void deserializeClothTools(const char* input_file);
 
